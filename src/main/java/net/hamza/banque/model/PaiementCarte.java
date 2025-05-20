@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "paiement_cartes")
 @Data
 public class PaiementCarte extends Transaction{
-    @Id
+
     private String numericCarte;
 
     private String codeMarkData;

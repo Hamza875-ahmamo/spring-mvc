@@ -9,9 +9,10 @@ import java.util.Date;
 @Table(name = "transactions")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Data
+@DiscriminatorColumn(name = "transaction_type")
 public class Transaction {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
 
     private Double monet;

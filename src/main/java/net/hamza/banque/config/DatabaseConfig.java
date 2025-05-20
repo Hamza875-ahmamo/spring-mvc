@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "net.hamza.banque.repository")
+@EnableJpaRepositories(basePackages = "net.hamza.banque")
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
 public class DatabaseConfig {
