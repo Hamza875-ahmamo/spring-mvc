@@ -1,12 +1,20 @@
 package net.hamza.banque.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Utilisateur {
+@Data
+public class Utilisateur implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +26,18 @@ public class Utilisateur {
     private String telephone;
     private String identifiant;
     private String motDePasse;
+    private Role role;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreation;
 
     private Boolean estActif;
+
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    private List<Compte> comptes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "utilisateur")
+    private List<Transaction> transactions = new ArrayList<>();
 
     // Constructeurs
     public Utilisateur() {
@@ -30,76 +45,39 @@ public class Utilisateur {
         this.estActif = true;
     }
 
-    // Getters et setters
-    public Long getId() {
-        return id;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public String getPassword() {
+        return "";
     }
 
-    public String getNom() {
-        return nom;
+    @Override
+    public String getUsername() {
+        return "";
     }
 
-    public void setNom(String nom) {
-        this.nom = nom;
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
     }
 
-    public String getPrenom() {
-        return prenom;
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
     }
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
-
-    public String getIdentifiant() {
-        return identifiant;
-    }
-
-    public void setIdentifiant(String identifiant) {
-        this.identifiant = identifiant;
-    }
-
-    public String getMotDePasse() {
-        return motDePasse;
-    }
-
-    public void setMotDePasse(String motDePasse) {
-        this.motDePasse = motDePasse;
-    }
-
-    public Date getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(Date dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
-    public Boolean getEstActif() {
-        return estActif;
-    }
-
-    public void setEstActif(Boolean estActif) {
-        this.estActif = estActif;
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
 }
