@@ -8,7 +8,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/utilisateurs")
-public class UtilisateurController {
+public class UtilisateurController  {
     private final UtulisateurService service;
 
     public UtilisateurController( UtulisateurService service) {
