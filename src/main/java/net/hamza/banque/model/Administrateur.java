@@ -10,7 +10,6 @@ import lombok.EqualsAndHashCode;
 @Table(name = "administrateurs")
 @Data
 public class Administrateur extends Utilisateur {
-    private String role;
 
 
 }

@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "virements")
 @Data
+@DiscriminatorValue("VIREMENT")
 public class Virement extends Transaction {
     private String compteSource;
     private String compteDestination;
