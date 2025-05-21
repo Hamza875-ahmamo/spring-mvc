@@ -1,14 +1,12 @@
 package net.hamza.banque.repository;
 
-
-import net.hamza.banque.model.Utilisateur;
+import net.hamza.banque.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-
 @Repository
-public interface UserRepo extends JpaRepository<Utilisateur, Long> {
-    Optional<Utilisateur> findByEmail(String email);
+public interface ClientRepo extends JpaRepository<Client, Long> {
+     Optional<Client> findByEmail(String email) ;
 
 }
