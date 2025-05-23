@@ -29,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
            @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
             String path = request.getServletPath();
-            if (path.startsWith("/auth/signup") || path.startsWith("/auth/login")) {
+            if (path.startsWith("/auth/signup") || path.startsWith("/auth/login")||path.startsWith("/auth/validateOtp")) {
                 filterChain.doFilter(request, response);
                 return;
             }

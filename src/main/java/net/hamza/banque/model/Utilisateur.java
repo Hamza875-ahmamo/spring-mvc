@@ -34,6 +34,13 @@ public class Utilisateur implements UserDetails {
     private String telephone;
     private String identifiant;
     private String password;
+    @Column(nullable = true)
+    private Integer otp;
+
+    public void setOtpNull() {
+        this.otp = null;
+    }
+
     @Enumerated(EnumType.STRING)
     @JsonSerialize
     private Role role;

@@ -13,6 +13,7 @@ import net.hamza.banque.model.Utilisateur;
 public class AuthResponse  {
     private String token;
     private Utilisateur user;
+    private int otp;
     private Boolean valid;
 }
 

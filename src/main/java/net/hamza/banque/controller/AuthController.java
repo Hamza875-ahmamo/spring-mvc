@@ -12,6 +12,7 @@ import net.hamza.banque.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @RestController
@@ -26,7 +27,7 @@ public class AuthController {
     private final AuthenticationService service;
 
         @PostMapping("login")
-        public ResponseEntity<AuthResponse> login(@RequestBody RequestAuth request){
+        public ResponseEntity<AuthResponse> login(@RequestBody RequestAuth request) throws IOException {
             System.out.println("true");
             return  ResponseEntity.ok(service.login(request));
 
@@ -43,21 +44,28 @@ public class AuthController {
         return userRepository.findByEmail(u).get();
 
     }
+    @GetMapping("/validateOtp")
+    public boolean validateOtp(@RequestParam Integer otp,@RequestParam String token){
+            Utilisateur user=this.getUserByToken(token);
+            Integer otpuser=user.getOtp();
+            user.setOtpNull();
+            userRepository.save(user);
+            return otpuser.equals(otp);
+
+
+    }
+
+
     @PostMapping("isAuth")
-    public ResponseEntity<AuthResponse> getUserByToken(@RequestBody AuthResponse response){
-            String username=jwtService.extractUsername(response.getToken());
+    public Utilisateur getUserByToken(@RequestBody String token){
+            String username=jwtService.extractUsername(token);
             AuthResponse authResponse=new AuthResponse();
             Utilisateur user =this.getUser(username);
-            AuthResponse.builder()
-                    .valid(jwtService.validateToken(response.getToken(),user))
-                    .user(user)
-                    .token(response.getToken())
-                    .build()
-            ;
 
 
 
-            return ResponseEntity.ok(authResponse);
+
+            return user;
 
 
 
