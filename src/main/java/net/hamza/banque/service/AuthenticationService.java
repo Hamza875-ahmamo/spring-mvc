@@ -85,7 +85,7 @@ public class AuthenticationService {
                     .addHeader(env.getRequiredProperty("api.name"), env.getRequiredProperty("api.value"))
                     .build();
 
-            Response responsesms = client.newCall(requestsms).execute();
+//            Response responsesms = client.newCall(requestsms).execute();
             return otp;
 
         }

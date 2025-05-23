@@ -57,7 +57,7 @@ public class AuthController {
 
 
     @PostMapping("isAuth")
-    public Utilisateur getUserByToken(@RequestBody String token){
+    public Utilisateur getUserByToken(@RequestParam String token){
             String username=jwtService.extractUsername(token);
             AuthResponse authResponse=new AuthResponse();
             Utilisateur user =this.getUser(username);
@@ -66,8 +66,6 @@ public class AuthController {
 
 
             return user;
-
-
 
     }
 }
