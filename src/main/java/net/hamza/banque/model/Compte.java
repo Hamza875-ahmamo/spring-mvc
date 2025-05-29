@@ -18,8 +18,7 @@ public class Compte {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreation;
 
-
-    private String typeCompte;
+    private TypeCompte typeCompte;
 
 
 }
