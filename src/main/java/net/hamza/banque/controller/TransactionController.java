@@ -1,5 +1,7 @@
 package net.hamza.banque.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.RequiredArgsConstructor;
 import net.hamza.banque.model.Transaction;
 import net.hamza.banque.service.TransactionService;
@@ -15,8 +17,9 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class TransactionController {
     private final TransactionService transactionService;
-
+    ObjectMapper objectMapper = new ObjectMapper();
     @GetMapping("/history/{count}")
+    @JsonSerialize
     public ResponseEntity<List<Transaction>> getTransactionList(@PathVariable int count) {
         try{
             return ResponseEntity.ok(transactionService.getAll(count));
@@ -39,7 +42,7 @@ public class TransactionController {
         }
     }
     @PostMapping("/sameClient")
-    public ResponseEntity<String> sameClientTransactions(@RequestParam long debiteId, @RequestParam long crediteId, @RequestParam double montant) {
+        public ResponseEntity<String> sameClientTransactions(@RequestParam String debiteId, @RequestParam String crediteId, @RequestParam double montant) {
         try {
             transactionService.sameClientTransactions(debiteId, crediteId, montant);
             return ResponseEntity.ok("Transaction successful");

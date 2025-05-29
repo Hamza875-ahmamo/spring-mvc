@@ -22,10 +22,10 @@ public class Transaction {
 
     private TypeTransaction typeTransaction;
     @ManyToOne
-    @JoinColumn(name = "compte_id", nullable = false)
+    @JoinColumn( nullable = false)
     private Compte compteDebite;
     @ManyToOne
-    @JoinColumn(name = "compte_id", nullable = false)
+    @JoinColumn( nullable = false)
     private Compte compteCredite;
 
 }

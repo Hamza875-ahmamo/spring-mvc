@@ -3,6 +3,7 @@ package net.hamza.banque.service;
 import jakarta.transaction.Transactional;
 import net.hamza.banque.model.Compte;
 import net.hamza.banque.model.Transaction;
+import net.hamza.banque.model.TypeTransaction;
 import net.hamza.banque.repository.CompteRepo;
 import net.hamza.banque.repository.TransactionRepo;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class TransactionService {
         return transactionRepo.findById(id).orElse(null);
     }
     @Transactional
-    public void sameClientTransactions(long DebiteId, long CrediteId,double montant) {
+    public void sameClientTransactions(String DebiteId, String CrediteId,double montant) {
         Compte compteCredite = compteRepo.findById(CrediteId).get();
         Compte compteDebite = compteRepo.findById(DebiteId).get();
         compteDebite.setSolde(compteDebite.getSolde() - montant);
@@ -34,6 +35,7 @@ public class TransactionService {
         transaction.setDateTransaction(new Timestamp(System.currentTimeMillis()));
         transaction.setCompteDebite(compteDebite);
         transaction.setCompteCredite(compteCredite);
+        transaction.setTypeTransaction(TypeTransaction.INTER_COMPTE_CLIENT);
         transactionRepo.save(transaction);
         compteRepo.save(compteDebite);
         compteRepo.save(compteCredite);
