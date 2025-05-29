@@ -25,5 +25,4 @@ public class Transaction {
     private String typeTransaction;
     private String description;
 
-
 }
