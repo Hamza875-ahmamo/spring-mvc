@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,34 +13,30 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transactions")
-public class Transaction {
+@Table(name = "notifications")
+public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String transactionType; // DEPOSIT, WITHDRAWAL, TRANSFER
-
-    @Column(nullable = false)
-    private BigDecimal amount;
-
     @ManyToOne
-    @JoinColumn(name = "from_account_id")
-    private Account fromAccount;
-
-    @ManyToOne
-    @JoinColumn(name = "to_account_id")
-    private Account toAccount;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(nullable = false)
-    private String status; // PENDING, COMPLETED, FAILED
+    private String type; // EMAIL, SMS, SECURITY_ALERT, TRANSACTION_ALERT
 
     @Column(nullable = false)
-    private String description;
+    private String title;
 
-    @Column(name = "transaction_date", nullable = false)
-    private LocalDateTime transactionDate;
+    @Column(nullable = false, length = 1000)
+    private String message;
+
+    @Column(nullable = false)
+    private boolean isRead;
+
+    @Column(name = "notification_date", nullable = false)
+    private LocalDateTime notificationDate;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -53,13 +48,14 @@ public class Transaction {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if (transactionDate == null) {
-            transactionDate = LocalDateTime.now();
+        if (notificationDate == null) {
+            notificationDate = LocalDateTime.now();
         }
+        isRead = false;
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-}
+} 

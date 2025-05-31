@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,34 +13,27 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transactions")
-public class Transaction {
+@Table(name = "login_activities")
+public class LoginActivity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String transactionType; // DEPOSIT, WITHDRAWAL, TRANSFER
-
-    @Column(nullable = false)
-    private BigDecimal amount;
-
     @ManyToOne
-    @JoinColumn(name = "from_account_id")
-    private Account fromAccount;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "to_account_id")
-    private Account toAccount;
+    @Column(name = "ip_address", nullable = false)
+    private String ipAddress;
 
-    @Column(nullable = false)
-    private String status; // PENDING, COMPLETED, FAILED
+    @Column(name = "device_info")
+    private String deviceInfo;
 
-    @Column(nullable = false)
-    private String description;
+    @Column(name = "login_status", nullable = false)
+    private String status; // SUCCESS, FAILED
 
-    @Column(name = "transaction_date", nullable = false)
-    private LocalDateTime transactionDate;
+    @Column(name = "login_date", nullable = false)
+    private LocalDateTime loginDate;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -53,8 +45,8 @@ public class Transaction {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if (transactionDate == null) {
-            transactionDate = LocalDateTime.now();
+        if (loginDate == null) {
+            loginDate = LocalDateTime.now();
         }
     }
 
@@ -62,4 +54,4 @@ public class Transaction {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-}
+} 
