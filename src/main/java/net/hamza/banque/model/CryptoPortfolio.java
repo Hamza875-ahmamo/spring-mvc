@@ -14,34 +14,37 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transactions")
-public class Transaction {
+@Table(name = "crypto_portfolios")
+public class CryptoPortfolio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String transactionType; // DEPOSIT, WITHDRAWAL, TRANSFER
-
-    @Column(nullable = false)
-    private BigDecimal amount;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "from_account_id")
-    private Account fromAccount;
-
-    @ManyToOne
-    @JoinColumn(name = "to_account_id")
-    private Account toAccount;
+    @JoinColumn(name = "crypto_id", nullable = false)
+    private CryptoCurrency cryptoCurrency;
 
     @Column(nullable = false)
-    private String status; // PENDING, COMPLETED, FAILED
+    private BigDecimal balance; // Quantité de crypto détenue
 
-    @Column(nullable = false)
-    private String description;
+    @Column(name = "average_buy_price", nullable = false)
+    private BigDecimal averageBuyPrice;
 
-    @Column(name = "transaction_date", nullable = false)
-    private LocalDateTime transactionDate;
+    @Column(name = "total_invested", nullable = false)
+    private BigDecimal totalInvested;
+
+    @Column(name = "current_value", nullable = false)
+    private BigDecimal currentValue;
+
+    @Column(name = "profit_loss")
+    private BigDecimal profitLoss;
+
+    @Column(name = "profit_loss_percentage")
+    private BigDecimal profitLossPercentage;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -53,13 +56,10 @@ public class Transaction {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if (transactionDate == null) {
-            transactionDate = LocalDateTime.now();
-        }
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-}
+} 

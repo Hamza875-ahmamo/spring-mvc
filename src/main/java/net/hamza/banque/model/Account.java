@@ -14,34 +14,30 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transactions")
-public class Transaction {
+@Table(name = "accounts")
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private String transactionType; // DEPOSIT, WITHDRAWAL, TRANSFER
+    private String accountNumber;
 
     @Column(nullable = false)
-    private BigDecimal amount;
+    private String accountType; // CHECKING, SAVINGS, etc.
+
+    @Column(nullable = false)
+    private BigDecimal balance;
+
+    @Column(nullable = false)
+    private String currency;
+
+    @Column(nullable = false)
+    private boolean isActive;
 
     @ManyToOne
-    @JoinColumn(name = "from_account_id")
-    private Account fromAccount;
-
-    @ManyToOne
-    @JoinColumn(name = "to_account_id")
-    private Account toAccount;
-
-    @Column(nullable = false)
-    private String status; // PENDING, COMPLETED, FAILED
-
-    @Column(nullable = false)
-    private String description;
-
-    @Column(name = "transaction_date", nullable = false)
-    private LocalDateTime transactionDate;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -53,13 +49,10 @@ public class Transaction {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        if (transactionDate == null) {
-            transactionDate = LocalDateTime.now();
-        }
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-}
+} 

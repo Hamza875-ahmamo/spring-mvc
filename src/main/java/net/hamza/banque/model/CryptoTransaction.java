@@ -14,31 +14,37 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transactions")
-public class Transaction {
+@Table(name = "crypto_transactions")
+public class CryptoTransaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String transactionType; // DEPOSIT, WITHDRAWAL, TRANSFER
-
-    @Column(nullable = false)
-    private BigDecimal amount;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "from_account_id")
-    private Account fromAccount;
+    @JoinColumn(name = "crypto_id", nullable = false)
+    private CryptoCurrency cryptoCurrency;
 
-    @ManyToOne
-    @JoinColumn(name = "to_account_id")
-    private Account toAccount;
+    @Column(nullable = false)
+    private String type; // BUY, SELL
+
+    @Column(nullable = false)
+    private BigDecimal amount; // Montant en USD
+
+    @Column(name = "crypto_amount", nullable = false)
+    private BigDecimal cryptoAmount; // Quantité de crypto achetée/vendue
+
+    @Column(name = "price_at_transaction", nullable = false)
+    private BigDecimal priceAtTransaction;
 
     @Column(nullable = false)
     private String status; // PENDING, COMPLETED, FAILED
 
-    @Column(nullable = false)
-    private String description;
+    @Column(name = "payment_method")
+    private String paymentMethod;
 
     @Column(name = "transaction_date", nullable = false)
     private LocalDateTime transactionDate;
@@ -62,4 +68,4 @@ public class Transaction {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-}
+} 
