@@ -1,0 +1,15 @@
+package net.hamza.banque.repository;
+
+import net.hamza.banque.model.Account;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface AccountRepository extends JpaRepository<Account, Long> {
+    List<Account> findByUserId(Long userId);
+    List<Account> findByAccountNumber(String accountNumber);
+    List<Account> findByIsActive(boolean isActive);
+    List<Account> findByUserIdAndIsActive(Long userId, boolean isActive);
+} 
