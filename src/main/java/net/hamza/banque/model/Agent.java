@@ -10,8 +10,13 @@ import lombok.EqualsAndHashCode;
 @Data
 
 public class Agent extends Utilisateur {
-    private String codeAgent;
-    private String agence;
+    public Agent() {
+        this.setRole(Role.AGENT);
+    }
+
+    @ManyToOne
+    private Bank bank;
+
 
 
 

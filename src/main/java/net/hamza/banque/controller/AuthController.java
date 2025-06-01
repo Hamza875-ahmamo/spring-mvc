@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import net.hamza.banque.dto.AuthResponse;
 import net.hamza.banque.dto.RequestAuth;
 import net.hamza.banque.jwt.JwtService;
+import net.hamza.banque.model.Role;
 import net.hamza.banque.model.Utilisateur;
 import net.hamza.banque.repository.UserRepo;
 import net.hamza.banque.service.AuthenticationService;
@@ -28,6 +29,8 @@ public class AuthController {
 
         @PostMapping("login")
         public ResponseEntity<AuthResponse> login(@RequestBody RequestAuth request) throws IOException {
+            request.setRole(Role.CLIENT);
+
             System.out.println("true");
             return  ResponseEntity.ok(service.login(request));
 

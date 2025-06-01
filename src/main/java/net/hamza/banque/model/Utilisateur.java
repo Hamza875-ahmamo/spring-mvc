@@ -3,10 +3,7 @@ package net.hamza.banque.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,35 +23,36 @@ public class Utilisateur implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
+    protected Long id;
 
-    private String nom;
-    private String prenom;
-    private String email;
-    private String telephone;
-    private String identifiant;
-    private String password;
+    protected String nom;
+    protected String prenom;
+    protected String email;
+    protected String telephone;
+    protected String identifiant;
+    protected String password;
     @Column(nullable = true)
-    private Integer otp;
+    protected Integer otp;
 
     public void setOtpNull() {
         this.otp = null;
     }
 
+    @Getter
     @Enumerated(EnumType.STRING)
     @JsonSerialize
-    private Role role;
+    protected Role role;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreation;
+    protected Date dateCreation;
 
-    private Boolean estActif;
+    protected Boolean estActif;
 
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Compte> comptes = new ArrayList<>();
+    protected List<Compte> comptes = new ArrayList<>();
 
     @OneToMany( fetch = FetchType.EAGER)
-    private List<Transaction> transactions = new ArrayList<>();
+    protected List<Transaction> transactions = new ArrayList<>();
 
 
 
@@ -63,8 +61,6 @@ public class Utilisateur implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
-
-
 
     @Override
     public String getUsername() {

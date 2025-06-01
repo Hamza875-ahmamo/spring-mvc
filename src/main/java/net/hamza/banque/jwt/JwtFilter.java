@@ -6,8 +6,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import net.hamza.banque.model.Role;
+import net.hamza.banque.model.Utilisateur;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -33,9 +36,17 @@ public class JwtFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-
-
             String header = request.getHeader("Authorization");
+
+
+
+
+
+
+
+
+
+
             if (header == null || header.isEmpty()) {
                 filterChain.doFilter(request, response);
             }
@@ -45,17 +56,31 @@ public class JwtFilter extends OncePerRequestFilter {
             assert header != null;
             String jwt = header.substring(7);
             final String userEmail = jwtService.extractUsername(jwt);
+
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+                Utilisateur userDetails = (Utilisateur) userDetailsService.loadUserByUsername(userEmail);
 
-                if (jwtService.validateToken(jwt, userDetails)) {
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    System.out.println("authenticated");
+                if (path.startsWith("/api/agent")) {
 
+                    final Role role = userDetails.getRole();
+                    if (jwtService.validateToken(jwt, userDetails) && role == Role.AGENT) {
+                        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                        System.out.println("authenticated");
+
+                    }
                 }
+                if (path.startsWith("/api/client"))
+                    if (jwtService.validateToken(jwt, userDetails)) {
+                        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                        System.out.println("authenticated");
+
+                    }
+
                 filterChain.doFilter(request,response);
 
 
