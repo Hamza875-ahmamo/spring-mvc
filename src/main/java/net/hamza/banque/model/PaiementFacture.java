@@ -8,17 +8,16 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "paiement_cartes")
 @Data
-public class PaiementCarte extends Transaction{
+public class PaiementFacture extends Transaction{
 
-    private String numericCarte;
+    private String numeroFacture;
 
-    private String codeMarkData;
     private String terminal;
-    private Boolean statue;
+    private ServiceType serviceType;
 
-    @OneToOne
-    @JoinColumn(name = "carte_id")
-    private Carte carte;
+
+    @ManyToOne
+    private Compte compte;
 
 
 }

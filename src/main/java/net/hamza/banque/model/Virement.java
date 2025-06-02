@@ -11,8 +11,10 @@ import lombok.EqualsAndHashCode;
 @Data
 @DiscriminatorValue("VIREMENT")
 public class Virement extends Transaction {
-    private String compteSource;
-    private String compteDestination;
+    @ManyToOne
+    private Compte compteSource;
+    @ManyToOne
+    private Compte compteDestination;
     private String motif;
 
 

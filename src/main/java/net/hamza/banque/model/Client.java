@@ -26,10 +26,8 @@ public class Client extends Utilisateur {
 
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
     private Carte carte;
-
-
-    @OneToMany(mappedBy = "client")
-    private List<Enrolement> enrolements = new ArrayList<>();
+    @OneToMany
+    private List<Compte> comptes = new ArrayList<>();
 
 
 

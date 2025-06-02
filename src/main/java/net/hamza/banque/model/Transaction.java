@@ -13,17 +13,18 @@ import java.util.Date;
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
-    private Long id;
+    protected Long id;
 
-    private Double monet;
+    protected Double montant;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateTransaction;
+    protected Date dateTransaction;
 
-    private String estAtt;
-    private String reference;
-    private String typeTransaction;
-    private String description;
+
+    protected String reference;
+    protected String description;
+
+
 
 
 }
