@@ -13,7 +13,8 @@ import java.util.List;
 @Table(name = "clients")
 @Data
 public class Client extends Utilisateur {
-    private String numeroClient;
+
+    private Long numeroClient;
     private String adresse;
     private String ville;
     private String codePostal;
@@ -24,10 +25,12 @@ public class Client extends Utilisateur {
 
     private String cin;
 
-    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToOne
     private Carte carte;
     @OneToMany
     private List<Compte> comptes = new ArrayList<>();
+    @OneToMany
+    private List<Feedback> feedbacks = new ArrayList<>();
 
 
 

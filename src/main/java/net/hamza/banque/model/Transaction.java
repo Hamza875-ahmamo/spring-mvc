@@ -14,6 +14,7 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
     protected Long id;
+    Transactiontype transactiontype;
 
     protected Double montant;
 

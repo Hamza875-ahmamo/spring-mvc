@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class Carte {
     @Id
-    private String numericCarte;
+    private Long numericCarte;
 
     private String titulaire;
     private Date dateExpiratration;
@@ -26,7 +26,7 @@ public class Carte {
     private Client client;
 
     @OneToOne(mappedBy = "carte", cascade = CascadeType.ALL)
-    private PaiementCarte paiementCarte;
+    private PaiementFacture paiementFacture;
 
 
 }

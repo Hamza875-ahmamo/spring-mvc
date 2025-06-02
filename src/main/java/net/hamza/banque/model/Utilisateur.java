@@ -48,7 +48,7 @@ public class Utilisateur implements UserDetails {
     @Temporal(TemporalType.TIMESTAMP)
     protected Date dateCreation;
 
-    protected Boolean estActif;
+    protected Boolean estActif= true;
 
     @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     protected List<Compte> comptes = new ArrayList<>();
@@ -78,7 +78,7 @@ public class Utilisateur implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return estActif;
     }
 
     @Override
