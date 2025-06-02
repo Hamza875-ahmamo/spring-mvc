@@ -11,7 +11,6 @@ import lombok.EqualsAndHashCode;
 @Data
 public class Recharge extends Transaction {
     private String numeroTelephone;
-    private double montant;
     private String operateur;
 
 

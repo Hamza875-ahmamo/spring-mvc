@@ -35,5 +35,5 @@ public class Compte {
     @OneToMany
     private List<Recharge> recharges = new ArrayList<Recharge>();
     @OneToMany
-    private List<PaiementCarte> paiementCartes = new ArrayList<PaiementCarte>();
+    private List<PaiementFacture> paiementCartes = new ArrayList<PaiementFacture>();
 }
