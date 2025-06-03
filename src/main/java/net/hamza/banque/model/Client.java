@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "clients")
 @Data
 public class Client extends Utilisateur {
-    private String numeroClient;
+
     private String adresse;
     private String ville;
     private String codePostal;
