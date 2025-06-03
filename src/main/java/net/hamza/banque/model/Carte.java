@@ -10,7 +10,7 @@ import java.util.Date;
 @Data
 public class Carte {
     @Id
-    private Long numericCarte;
+    private String numericCarte;
 
     private String titulaire;
     private Date dateExpiratration;
@@ -22,10 +22,11 @@ public class Carte {
     private String statue;
 
     @OneToOne
-   private Compte compte;
+    @JoinColumn(name = "client_id")
+    private Client client;
 
     @OneToOne(mappedBy = "carte", cascade = CascadeType.ALL)
-    private PaiementFacture paiementFacture;
+    private PaiementCarte paiementCarte;
 
 
 }

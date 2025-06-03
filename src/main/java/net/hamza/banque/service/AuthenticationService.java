@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import net.hamza.banque.dto.AuthResponse;
 import net.hamza.banque.dto.RequestAuth;
 import net.hamza.banque.jwt.JwtService;
+import net.hamza.banque.model.Client;
 import net.hamza.banque.model.Utilisateur;
+import net.hamza.banque.repository.ClientRepo;
 import net.hamza.banque.repository.UserRepo;
 import okhttp3.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ import java.util.Timer;
 
 public class AuthenticationService {
     public final UserRepo userRepo;
+    public final ClientRepo clientRepo;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -37,20 +40,20 @@ public class AuthenticationService {
     private Environment env;
 
     public AuthResponse login(RequestAuth request) throws IOException {
-
-
-
-
-
+//
+//
+//
+//
+//
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
-            var user=userRepo.findByEmail(request.getUsername())
+            Client user= clientRepo.findByEmail(request.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException(request.getUsername()));
             var jwtToken=jwtService.generateToken(user);
             int otp=this.sendOtp(user.getTelephone());
             user.setOtp(otp);
-            userRepo.save(user);
+            clientRepo.save(user);
             return AuthResponse.builder()
                     .token(jwtToken)
                     .otp(otp)
@@ -58,7 +61,7 @@ public class AuthenticationService {
     }
         public int optGenerate(){
             Random rand =new Random();
-            return rand.nextInt(1000000);
+            return rand.nextInt(1000000000);
         }
 
         public int sendOtp(String phone ) throws IOException {
@@ -73,19 +76,19 @@ public class AuthenticationService {
                     .build();
             Call call =new OkHttpClient().newCall(request);
             call.execute();
-            OkHttpClient client = new OkHttpClient();
+//            OkHttpClient client = new OkHttpClient();
 
-            MediaType mediaType = MediaType.parse("application/json");
-            RequestBody bodysms = RequestBody.create(mediaType, "{\"type\":\"transactional\",\"unicodeEnabled\":false,\"sender\":\"pfs\",\"recipient\":\""+phone+"\",\"content\":\"your code to login : "+otp+"\"}");
-            Request requestsms = new Request.Builder()
-                    .url("https://api.brevo.com/v3/transactionalSMS/send")
-                    .post(bodysms)
-                    .addHeader("accept", "application/json")
-                    .addHeader("content-type", "application/json")
-                    .addHeader(env.getRequiredProperty("api.name"), env.getRequiredProperty("api.value"))
-                    .build();
-
-            Response responsesms = client.newCall(requestsms).execute();
+//            MediaType mediaType = MediaType.parse("application/json");
+//            RequestBody bodysms = RequestBody.create(mediaType, "{\"type\":\"transactional\",\"unicodeEnabled\":false,\"sender\":\"pfs\",\"recipient\":\""+phone+"\",\"content\":\"your code to login : "+otp+"\"}");
+//            Request requestsms = new Request.Builder()
+//                    .url("https://api.brevo.com/v3/transactionalSMS/send")
+//                    .post(bodysms)
+//                    .addHeader("accept", "application/json")
+//                    .addHeader("content-type", "application/json")
+//                    .addHeader(env.getRequiredProperty("api.name"), env.getRequiredProperty("api.value"))
+//                    .build();
+//
+//            Response responsesms = client.newCall(requestsms).execute();
             return otp;
 
         }
@@ -94,21 +97,21 @@ public class AuthenticationService {
 
 
 
-            var user = Utilisateur.builder()
-                    .email(request.getUsername())
-                    .password(passwordEncoder.encode(request.getPassword()))
-                    .role(request.getRole())
-                    .telephone(request.getPhone())
-                    .prenom(request.getFirstName())
-                    .nom(request.getLastName())
-                    .role(request.getRole())
-                    .estActif(true)
+            Client client = new Client();
 
 
 
-                    .build();
-            userRepo.save(user);
-            var jwtToken=jwtService.generateToken(user);
+            client.setEmail(request.getUsername());
+            client.setPassword(passwordEncoder.encode(request.getPassword()));
+            client.setRole(request.getRole());
+            client.setTelephone(request.getPhone());
+            client.setPrenom(request.getFirstName());
+            client.setNom(request.getLastName());
+            client.setEstActif(true);
+
+
+            clientRepo.save(client);
+            var jwtToken=jwtService.generateToken(client);
 
             return AuthResponse.builder()
                     .token(jwtToken)

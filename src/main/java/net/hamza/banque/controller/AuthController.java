@@ -6,7 +6,9 @@ import lombok.RequiredArgsConstructor;
 import net.hamza.banque.dto.AuthResponse;
 import net.hamza.banque.dto.RequestAuth;
 import net.hamza.banque.jwt.JwtService;
+import net.hamza.banque.model.Client;
 import net.hamza.banque.model.Utilisateur;
+import net.hamza.banque.repository.ClientRepo;
 import net.hamza.banque.repository.UserRepo;
 import net.hamza.banque.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,10 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth/")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthController {
     private final UserRepo userRepository;
+    private final ClientRepo clientRepo;
     private  final JwtService jwtService;
     
 
@@ -57,15 +60,12 @@ public class AuthController {
 
 
     @PostMapping("isAuth")
-    public Utilisateur getUserByToken(@RequestBody String token){
+    public Utilisateur getUserByToken(@RequestParam String token){
             String username=jwtService.extractUsername(token);
-            AuthResponse authResponse=new AuthResponse();
-            Utilisateur user =this.getUser(username);
 
 
+        return this.getUser(username);
 
-
-            return user;
 
 
 
