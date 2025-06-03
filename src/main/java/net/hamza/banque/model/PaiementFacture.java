@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class PaiementFacture extends Transaction{
 
-    private String numeroFacture;
+    private Long numeroFacture;
 
     private String terminal;
     private ServiceType serviceType;
@@ -18,6 +18,11 @@ public class PaiementFacture extends Transaction{
 
     @ManyToOne
     private Compte compte;
+    @OneToOne
+    @JoinColumn(name = "carte_id")
+    private Carte carte;
+
+
 
 
 }

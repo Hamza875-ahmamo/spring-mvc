@@ -21,24 +21,8 @@ public class TransactionService {
     private final PaiementFacureRepo paiementFacureRepo;
     private final VirementRepo virementRepo;
 
-    public Transactions getTransactionsByCompte(String compteId) {
 
-        if (compteId == null) {
-            throw new IllegalArgumentException("Le numéro de compte ne peut pas être nul");
-        }
-
-
-        Compte compte = compteRepo.findById(compteId)
-                .orElseThrow(() -> new IllegalArgumentException("Compte introuvable : " + compteId));
-
-        Transactions transaction =new Transactions() ;
-        transaction.setVirements(compte.getVirements());
-        transaction.setPaiementCartes(compte.getPaiementCartes());
-        transaction.setRecharges(compte.getRecharges());
-
-        return transaction;
-    }
-    public void addRecharge(Compte compte, Recharge recharge) {
+    public void ResponceTransaction(Compte compte, Recharge recharge) {
 
         this.rechargeRepo.save(recharge);
         List<Recharge> recharges=compte.getRecharges();
@@ -46,6 +30,10 @@ public class TransactionService {
         compte.setRecharges(recharges);
         compte.setSolde(compte.getSolde()-recharge.getMontant());
         compteRepo.save(compte);
+        ResponseTransaction responseTransaction = ResponseTransaction.builder()
+                .message("Recharge effectuée avec succès")
+                .status(true)
+                .build();
     }
 
 
@@ -62,7 +50,7 @@ public class TransactionService {
         if (compteDebit.getSolde() < virement.getMontant()) {
             return ResponseTransaction.builder()
                     .message("Solde insuffisant pour effectuer le virement")
-                    .statue(false)
+                    .status(false)
                     .build();
         }
         compteDebit.setSolde(compteDebit.getSolde()-virement.getMontant());
@@ -75,12 +63,34 @@ public class TransactionService {
         compteRepo.save(compteDebit);
         return ResponseTransaction.builder()
                 .message("Virement effectué avec succès")
-                .statue(true)
+                .status(true)
                 .build();
 
 
 
     }
+    public ResponseTransaction addPaiementFacture(PaiementFacture paiementFacture) {
+
+        this.paiementFacureRepo.save(paiementFacture);
+
+        Compte compte = paiementFacture.getCompte();
+        List<PaiementFacture> paiementFactures = compte.getPaiementFactures();
+        paiementFactures.add(paiementFacture);
+        compte.setPaiementFactures(paiementFactures);
+        if (compte.getSolde() < paiementFacture.getMontant()) {
+            return ResponseTransaction.builder()
+                    .message("Solde insuffisant pour effectuer le paiement de la facture")
+                    .status(false)
+                    .build();
+        }
+        compte.setSolde(compte.getSolde() - paiementFacture.getMontant());
+        compteRepo.save(compte);
+        return ResponseTransaction.builder()
+                .message("Paiement de la facture effectué avec succès")
+                .status(true)
+                .build();
+    }
+
 
 
 

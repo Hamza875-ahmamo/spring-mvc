@@ -17,7 +17,8 @@ import java.util.List;
 public class Compte {
 
     @Id
-    private String numericCompte;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long numericCompte;
 
     private Double solde = 0.0;
 
@@ -35,5 +36,5 @@ public class Compte {
     @OneToMany
     private List<Recharge> recharges = new ArrayList<Recharge>();
     @OneToMany
-    private List<PaiementFacture> paiementCartes = new ArrayList<PaiementFacture>();
+    private List<PaiementFacture> paiementFactures = new ArrayList<PaiementFacture>();
 }

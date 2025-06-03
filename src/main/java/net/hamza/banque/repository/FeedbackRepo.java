@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+// In FeedbackRepo.java
 @Repository
-public interface ClientRepo extends JpaRepository<Client, Long> {
+public interface FeedbackRepo extends JpaRepository<Feedback, Long> {
 
 }

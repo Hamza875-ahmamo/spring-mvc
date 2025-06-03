@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class Device {
     @Id
-    private String code;
+    private Long code;
 
     private String nom;
     private Double taunChange;
