@@ -25,8 +25,7 @@ public class Client extends Utilisateur {
 
     private String cin;
 
-    @OneToOne
-    private Carte carte;
+
     @OneToMany
     private List<Compte> comptes = new ArrayList<>();
     @OneToMany
