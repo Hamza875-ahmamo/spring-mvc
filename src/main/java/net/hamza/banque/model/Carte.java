@@ -22,11 +22,8 @@ public class Carte {
     private String statue;
 
     @OneToOne
-    @JoinColumn(name = "client_id")
-    private Client client;
+    private Compte compte;
 
-    @OneToOne(mappedBy = "carte", cascade = CascadeType.ALL)
-    private PaiementCarte paiementCarte;
 
 
 }
