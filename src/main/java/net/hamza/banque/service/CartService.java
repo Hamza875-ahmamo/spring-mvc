@@ -3,6 +3,7 @@ package net.hamza.banque.service;
 import lombok.RequiredArgsConstructor;
 import net.hamza.banque.model.Carte;
 import net.hamza.banque.model.Client;
+import net.hamza.banque.model.Compte;
 import net.hamza.banque.repository.CarteRepo;
 import net.hamza.banque.repository.ClientRepo;
 import org.springframework.stereotype.Service;
@@ -16,37 +17,30 @@ public class CartService {
     private final ClientRepo clientRepo;
     private final CarteRepo carteRepo;
 
-    public void addToCart(Carte carte, Long clientId) {
-        Client client= clientRepo.findById(clientId)
-                .orElseThrow(() -> new RuntimeException("Client not found with id: " + clientId));
-        carte.setClient(client);
+    public void addToCart(Carte carte, Compte compte) {
+
+        carte.setCompte(compte);
         carteRepo.save(carte);
     }
-    public void desactiverCarte(Long numericCarte) {
-        Carte carte = carteRepo.findById(numericCarte)
-                .orElseThrow(() -> new RuntimeException("Carte non trouvée avec l'ID: " + numericCarte));
+    public void desactiverCarte(Carte carte) {
 
         carte.setEstActive(false);
         carte.setStatue("DESACTIVEE");
         carteRepo.save(carte);
     }
-    public void activerCarte(Long numericCarte) {
-        Carte carte = carteRepo.findById(numericCarte)
-                .orElseThrow(() -> new RuntimeException("Carte non trouvée avec l'ID: " + numericCarte));
+    public void activerCarte(Carte carte) {
+
 
         carte.setEstActive(true);
         carte.setStatue("ACTIVE");
         carteRepo.save(carte);
     }
 
-    public void supprimerCarte(Long numericCarte) {
-        Carte carte = carteRepo.findById(numericCarte)
-                .orElseThrow(() -> new RuntimeException("Carte non trouvée avec l'ID: " + numericCarte));
+    public void supprimerCarte(Carte carte) {
         carteRepo.delete(carte);
     }
-    public void renouvelerCarteExpiree(Long numericCarte) {
-        Carte carte = carteRepo.findById(numericCarte)
-                .orElseThrow(() -> new RuntimeException("Carte non trouvée avec l'ID: " + numericCarte));
+    public void renouvelerCarteExpiree(Carte carte) {
+
         Date today = new Date();
         if (carte.getDateExpiratration().before(today)) {
             Date nouvelleDate = carte.getDateExpiratration();

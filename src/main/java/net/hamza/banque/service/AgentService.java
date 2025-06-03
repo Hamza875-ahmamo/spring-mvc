@@ -14,9 +14,8 @@ import java.util.List;
 public class AgentService {
     private final AgentRepo agentRepo;
     private final ClientRepo clientRepo;
-    public void creerClient(Client client,Long  AgentId) {
-        Agent agent = agentRepo.findById(AgentId)
-                .orElseThrow(() -> new RuntimeException("Agent not found with id: " + AgentId));
+    public void creerClient(Client client,Agent agent) {
+
         Client nouveauClient = clientRepo.save(client);
         List<Client> clients = agent.getCleients();
         clients.add(nouveauClient);
@@ -27,22 +26,14 @@ public class AgentService {
 
 
     }
-    public void supprimerClient(Long clientId, Long agentId) {
-        Agent agent = agentRepo.findById(agentId)
-                .orElseThrow(() -> new RuntimeException("Agent not found with id: " + agentId));
-        Client client = clientRepo.findById(clientId)
-                .orElseThrow(() -> new RuntimeException("Client not found with id: " + clientId));
+    public void supprimerClient(Agent agent,Client client) {
         List<Client> clients = agent.getCleients();
         clients.remove(client);
         agent.setCleients(clients);
         agentRepo.save(agent);
         clientRepo.delete(client);
     }
-    public void desactiverClient(Long clientId, Long agentId) {
-        Agent agent = agentRepo.findById(agentId)
-                .orElseThrow(() -> new RuntimeException("Agent not found with id: " + agentId));
-        Client client = clientRepo.findById(clientId)
-                .orElseThrow(() -> new RuntimeException("Client not found with id: " + clientId));
+    public void desactiverClient(Agent agent,Client client) {
         client.isAccountNonLocked();
         clientRepo.save(client);
     }

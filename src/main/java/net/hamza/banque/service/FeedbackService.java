@@ -1,5 +1,6 @@
 package net.hamza.banque.service;
 
+import jakarta.faces.view.facelets.Facelet;
 import lombok.RequiredArgsConstructor;
 import net.hamza.banque.model.Agent;
 import net.hamza.banque.model.Client;
@@ -18,11 +19,7 @@ public class FeedbackService {
     private final FeedbackRepo feedbackRepo;
     private final ClientRepo clientRepo;
     private final AgentRepo agentRepo;
-    public void save(Feedback feedback,Long clientId, Long agentId) {
-        Client client = clientRepo.findById(clientId)
-                .orElseThrow(() -> new RuntimeException("Client not found"));
-        Agent agent = agentRepo.findById(agentId)
-                .orElseThrow(() -> new RuntimeException("Agent not found"));
+    public void save(Feedback feedback,Client client, Agent agent) {
         feedback.setClient(client);
         feedback.setAgent(agent);
         feedbackRepo.save(feedback);
@@ -40,9 +37,7 @@ public class FeedbackService {
 
         return feedbackRepo.save(feedback);
     }
-    public void deleteFeedback(Long id) {
-        Feedback feedback = feedbackRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Feedback non trouvé avec l'ID: " + id));
+    public void deleteFeedback(Feedback feedback) {
 
         feedbackRepo.delete(feedback);
     }

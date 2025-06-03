@@ -11,5 +11,5 @@ import java.util.List;
 public class Transactions {
     private List<Virement> virements;
     private List<Recharge> recharges;
-    private List<PaiementFacture> paiementCartes;
+    private List<PaiementFacture> paiementFactures;
 }
